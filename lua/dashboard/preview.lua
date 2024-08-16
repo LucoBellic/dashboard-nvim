@@ -58,7 +58,7 @@ function view:preview_events()
       local wins = api.nvim_list_wins()
       if #wins == 2 then
         local scol = bit.rshift(vim.o.columns, 1) - bit.rshift(winconfig.width, 1)
-        winconfig.col[false] = scol
+        winconfig.col = scol
         api.nvim_win_set_config(self.preview_winid, winconfig)
         self.win_width = cur_width
         return
@@ -68,7 +68,7 @@ function view:preview_events()
         local new_win = vim.tbl_filter(function(k)
           return k ~= self.main_winid and k ~= self.preview_winid
         end, wins)[1]
-        winconfig.col[false] = winconfig.col[false] + api.nvim_win_get_width(new_win)
+        winconfig.col = winconfig.col + api.nvim_win_get_width(new_win)
         api.nvim_win_set_config(self.preview_winid, winconfig)
         self.win_width = cur_width
       end
