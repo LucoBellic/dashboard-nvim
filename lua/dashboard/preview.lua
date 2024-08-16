@@ -18,15 +18,15 @@ function view:open_window(opt)
   }
 
   self.bufnr = api.nvim_create_buf(false, true)
-  api.nvim_buf_set_option(self.bufnr, 'filetype', 'dashboardpreview')
+  api.nvim_set_option_value('filetype', 'dashboardpreview', { buf = self.bufnr })
   self.winid = api.nvim_open_win(self.bufnr, false, opts)
   if vim.fn.has('nvim-0.8') == 1 then
-    local normal = api.nvim_get_hl_by_name('Normal', true)
+    local normal = api.nvim_get_hl(0, { name = 'Normal' })
     pcall(api.nvim_set_hl, 0, 'DashboardPreview', normal)
   else
     api.nvim_set_hl(0, 'DashboardPreview', { bg = 'none' })
   end
-  api.nvim_win_set_option(self.winid, 'winhl', 'Normal:DashboardPreview')
+  api.nvim_set_option_value('winhl', 'Normal:DashboardPreview', { win = self.winid })
   return { self.bufnr, self.winid }
 end
 
