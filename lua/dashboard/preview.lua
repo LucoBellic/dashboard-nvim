@@ -107,6 +107,19 @@ function view:preview_events()
 end
 
 function view:open_preview(opt)
+  -- Update the preview window position if the preview window is already open.
+  if self.preview_winid and api.nvim_win_is_valid(self.preview_winid) then
+    vim.api.nvim_win_set_config(self.preview_winid, {
+      row = math.floor(opt.height / 5),
+      col = math.floor((vim.o.columns - opt.width) / 2),
+      width = opt.width,
+      height = opt.height,
+      relative = 'editor',
+    })
+    self:preview_events()
+    return
+  end
+
   self.preview_bufnr, self.preview_winid = unpack(view:open_window(opt))
 
   api.nvim_buf_call(self.preview_bufnr, function()
